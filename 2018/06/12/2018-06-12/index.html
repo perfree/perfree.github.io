@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>MyBatis Mapper代理的开发方式 | Perfree | 学而时习之,不亦说乎</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="MyBatis">
+    <meta name="description" content="Mapper接口开发方法只需要程序员编写Mapper接口（相当于Dao接口），由Mybatis框架根据接口定义创建接口的动态代理对象，代理对象的方法体同上边Dao接口实现类方法。同时mybatis官方也推荐使用mapper代理方法开发mapper接口，程序员不用编写mapper接口实现类，使用mapper代理方法时，输入参数可以使用pojo包装对象或map对象，保证dao的通用性。 1.开发规范(">
+<meta name="keywords" content="MyBatis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MyBatis Mapper代理的开发方式">
+<meta property="og:url" content="http://www.perfree.top/2018/06/12/2018-06-12/index.html">
+<meta property="og:site_name" content="Perfree">
+<meta property="og:description" content="Mapper接口开发方法只需要程序员编写Mapper接口（相当于Dao接口），由Mybatis框架根据接口定义创建接口的动态代理对象，代理对象的方法体同上边Dao接口实现类方法。同时mybatis官方也推荐使用mapper代理方法开发mapper接口，程序员不用编写mapper接口实现类，使用mapper代理方法时，输入参数可以使用pojo包装对象或map对象，保证dao的通用性。 1.开发规范(">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-12T10:49:35.097Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MyBatis Mapper代理的开发方式">
+<meta name="twitter:description" content="Mapper接口开发方法只需要程序员编写Mapper接口（相当于Dao接口），由Mybatis框架根据接口定义创建接口的动态代理对象，代理对象的方法体同上边Dao接口实现类方法。同时mybatis官方也推荐使用mapper代理方法开发mapper接口，程序员不用编写mapper接口实现类，使用mapper代理方法时，输入参数可以使用pojo包装对象或map对象，保证dao的通用性。 1.开发规范(">
+    
+        <link rel="alternate" type="application/atom+xml" title="Perfree" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Perfree</h5>
+          <a href="mailto:741223257@qq.com" title="741223257@qq.com" class="mail">741223257@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://weibo.com/gbcxf" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                微博
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/perfree" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MyBatis Mapper代理的开发方式</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MyBatis Mapper代理的开发方式</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-12T10:07:07.000Z" itemprop="datePublished" class="page-time">
+  2018-06-12
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MyBatis/">MyBatis</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-开发规范"><span class="post-toc-number">1.</span> <span class="post-toc-text">1.开发规范</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-Mapper-xml映射文件"><span class="post-toc-number">2.</span> <span class="post-toc-text">2.Mapper.xml映射文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-Mapper-java接口文件"><span class="post-toc-number">3.</span> <span class="post-toc-text">3.Mapper.java接口文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-加载Mapper-xml映射文件"><span class="post-toc-number">4.</span> <span class="post-toc-text">4.加载Mapper.xml映射文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5-测试"><span class="post-toc-number">5.</span> <span class="post-toc-text">5.测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#6-总结"><span class="post-toc-number">6.</span> <span class="post-toc-text">6.总结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#7-最后扩展下-和"><span class="post-toc-number">7.</span> <span class="post-toc-text">7.最后扩展下#{}和${}</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-2018-06-12"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MyBatis Mapper代理的开发方式</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-12 18:07:07" datetime="2018-06-12T10:07:07.000Z"  itemprop="datePublished">2018-06-12</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MyBatis/">MyBatis</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Mapper接口开发方法只需要程序员编写Mapper接口（相当于Dao接口），由Mybatis框架根据接口定义创建接口的动态代理对象，代理对象的方法体同上边Dao接口实现类方法。同时mybatis官方也推荐使用mapper代理方法开发mapper接口，程序员不用编写mapper接口实现类，使用mapper代理方法时，输入参数可以使用pojo包装对象或map对象，保证dao的通用性。</p>
+<h2 id="1-开发规范"><a href="#1-开发规范" class="headerlink" title="1.开发规范"></a>1.开发规范</h2><p>(1) Mapper.xml文件中的namespace与mapper接口的类路径相同。<br>(2) Mapper接口方法名和Mapper.xml中定义的每个statement的id相同<br>(3) Mapper接口方法的输入参数类型和mapper.xml中定义的每个sql 的parameterType的类型相同<br>(4) Mapper接口方法的输出参数类型和mapper.xml中定义的每个sql的resultType的类型相同</p>
+<h2 id="2-Mapper-xml映射文件"><a href="#2-Mapper-xml映射文件" class="headerlink" title="2.Mapper.xml映射文件"></a>2.Mapper.xml映射文件</h2><p>定义mapper映射文件UserMapper.xml,需要修改如下几项:</p>
+<p>(1) namespace的值为UserMapper接口的路径<br>(2) parameterType要和接口定义的输入参数类型保持一致<br>(3) resultType同样和接口中定义的输出(返回)参数类型保持一致,如果返回的值类型为List,直接定义为实体存储对象即可,这和selectOne或selectList有关</p>
+<p>代码示例:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper</span><br><span class="line">    PUBLIC <span class="string">"-//mybatis.org//DTD Mapper 3.0//EN"</span></span><br><span class="line">    <span class="string">"http://mybatis.org/dtd/mybatis-3-mapper.dtd"</span>&gt;</span><br><span class="line">&lt;mapper namespace=<span class="string">"com.fly.mapper.UserMapper"</span>&gt;</span><br><span class="line">	&lt;select id=<span class="string">"findUserById"</span> parameterType=<span class="string">"int"</span> resultType=<span class="string">"user"</span>&gt;</span><br><span class="line">		SELECT * FROM t_user WHERE id = <span class="comment">#&#123;id&#125;</span></span><br><span class="line">	&lt;/select&gt;</span><br><span class="line">	&lt;update id=<span class="string">"updateUserById"</span> parameterType=<span class="string">"user"</span>&gt;</span><br><span class="line">		UPDATE t_user SET username = <span class="comment">#&#123;username&#125; WHERE id = #&#123;id&#125;</span></span><br><span class="line">	&lt;/update&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-Mapper-java接口文件"><a href="#3-Mapper-java接口文件" class="headerlink" title="3.Mapper.java接口文件"></a>3.Mapper.java接口文件</h2><p>接口的定义需注意以下几项:</p>
+<p>(1) Mapper接口方法名和Mapper.xml中定义的statement的id相同<br>(2) Mapper接口方法的输入参数类型和mapper.xml中定义的statement的parameterType的类型相同<br>(3) Mapper接口方法的输出参数类型和mapper.xml中定义的statement的resultType的类型相同</p>
+<p>代码示例:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">package com.fly.mapper;</span><br><span class="line"></span><br><span class="line">import com.fly.pojo.User;</span><br><span class="line"></span><br><span class="line">public interface UserMapper &#123;</span><br><span class="line">	//根据id查找用户信息</span><br><span class="line">	public User findUserById(int id);</span><br><span class="line">	//根据id修改用户名称</span><br><span class="line">	public void updateUserById(User user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-加载Mapper-xml映射文件"><a href="#4-加载Mapper-xml映射文件" class="headerlink" title="4.加载Mapper.xml映射文件"></a>4.加载Mapper.xml映射文件</h2><p>在sqlMapConfig.xml做如下修改(多种方式加载):<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;mappers&gt;</span><br><span class="line">	&lt;!-- 通过mapper代理接口加载mapper配置文件mapper接口和映射文件名称相同，且在同一目录下面 --&gt;</span><br><span class="line">	&lt;!-- &lt;mapper class=<span class="string">"com.fly.mapper.UserMapper"</span>/&gt; --&gt;</span><br><span class="line">	&lt;!-- 单个加载映射文件 --&gt;</span><br><span class="line">	&lt;mapper resource=<span class="string">"mapper/UserMapper.xml"</span>/&gt;</span><br><span class="line">	&lt;!-- 批量加载映射文件 必须保证mapper配置文件mapper接口和映射文件名称相同且在同一目录下面  --&gt;</span><br><span class="line">	&lt;!-- &lt;package name=<span class="string">"com.fly.mapper"</span>/&gt; --&gt;</span><br><span class="line">&lt;/mappers&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="5-测试"><a href="#5-测试" class="headerlink" title="5.测试"></a>5.测试</h2><p>这里使用了junit进行测试:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">package com.fly.test;</span><br><span class="line"></span><br><span class="line">import java.io.InputStream;</span><br><span class="line">import org.apache.ibatis.io.Resources;</span><br><span class="line">import org.apache.ibatis.session.SqlSession;</span><br><span class="line">import org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line">import org.apache.ibatis.session.SqlSessionFactoryBuilder;</span><br><span class="line">import org.junit.Before;</span><br><span class="line">import org.junit.Test;</span><br><span class="line">import com.fly.mapper.UserMapper;</span><br><span class="line">import com.fly.pojo.User;</span><br><span class="line"></span><br><span class="line">public class MybatisTest &#123;</span><br><span class="line">	private SqlSessionFactory ssf;</span><br><span class="line">	@Before</span><br><span class="line">	public void createSqlSessionFactory() throws Exception&#123;</span><br><span class="line">		String resource = <span class="string">"sqlMapConfig.xml"</span>;</span><br><span class="line">		InputStream is = Resources.getResourceAsStream(resource);</span><br><span class="line">		//使用SqlSessionFactoryBuilder创建sessionFactory</span><br><span class="line">		SqlSessionFactoryBuilder ssfb = new SqlSessionFactoryBuilder();</span><br><span class="line">		ssf=ssfb.build(is);</span><br><span class="line">	&#125;</span><br><span class="line">	@Test</span><br><span class="line">	public void <span class="function"><span class="title">findUserById</span></span>()&#123;</span><br><span class="line">		//获取session</span><br><span class="line">		SqlSession session = ssf.openSession();</span><br><span class="line">		//创建usermapper对象，mybatis自动生成mapper代理对象</span><br><span class="line">		UserMapper mapper = session.getMapper(UserMapper.class);</span><br><span class="line">		//调用代理对象方法</span><br><span class="line">		User u = mapper.findUserById(10);</span><br><span class="line">		System.out.println(u);</span><br><span class="line">		//关闭session</span><br><span class="line">		session.close();</span><br><span class="line">	&#125;</span><br><span class="line">	@Test</span><br><span class="line">	public void <span class="function"><span class="title">updateUserById</span></span>()&#123;</span><br><span class="line">		//获取session</span><br><span class="line">		SqlSession session = ssf.openSession();</span><br><span class="line">		//创建usermapper对象，mybatis自动生成mapper代理对象</span><br><span class="line">		UserMapper mapper = session.getMapper(UserMapper.class);</span><br><span class="line">		User u = new User();</span><br><span class="line">		u.setId(10);</span><br><span class="line">		u.setUsername(<span class="string">"小钢炮"</span>);</span><br><span class="line">		//调用代理对象方法</span><br><span class="line">		mapper.updateUserById(u);</span><br><span class="line">		//提交</span><br><span class="line">		session.commit();</span><br><span class="line">		//关闭session</span><br><span class="line">		session.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6.总结"></a>6.总结</h2><p>(1) selectOne和selectList<br>    如果mapper方法返回单个pojo对象（非集合对象），代理对象内部通过selectOne查询数据库。<br>    如果mapper方法返回集合对象，代理对象内部通过selectList查询数据库。</p>
+<p>(2) namespace<br>    (重申)Mapper.xml文件中的namespace与mapper接口的类路径一定要相同。</p>
+<h2 id="7-最后扩展下-和"><a href="#7-最后扩展下-和" class="headerlink" title="7.最后扩展下#{}和${}"></a>7.最后扩展下#{}和${}</h2><p>(1) #{}</p>
+<pre><code>#{}表示一个占位符号，#{}接收输入参数，类型可以是简单类型，pojo、hashmap。
+如果接收简单类型，#{}中可以写成value或其它名称。
+#{}接收pojo对象值，通过OGNL读取对象中的属性值，通过属性.属性.属性...的方式获取对象属性值。
+</code></pre><p>(2) ${}<br>    ${}表示一个拼接符号，会引用sql注入，所以不建议使用${}<br>    ${}接收输入参数，类型可以是简单类型，pojo、hashmap。<br>    如果接收简单类型，${}中只能写成value。<br>    ${}接收pojo对象值，通过OGNL读取对象中的属性值，通过属性.属性.属性…的方式获取对象属性值。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-06-12T10:49:35.097Z" itemprop="dateUpdated">2018-06-12 18:49:35</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="http://www.perfree.top">
+            <img src="/img/avatar.jpg" alt="Perfree">
+            Perfree
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MyBatis/">MyBatis</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.perfree.top/2018/06/12/2018-06-12/&title=《MyBatis Mapper代理的开发方式》 — Perfree&pic=http://www.perfree.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.perfree.top/2018/06/12/2018-06-12/&title=《MyBatis Mapper代理的开发方式》 — Perfree&source=云淡风轻" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.perfree.top/2018/06/12/2018-06-12/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MyBatis Mapper代理的开发方式》 — Perfree&url=http://www.perfree.top/2018/06/12/2018-06-12/&via=http://www.perfree.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.perfree.top/2018/06/12/2018-06-12/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/11/2018-06-11/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">初次配置使用MyBatis</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Perfree &copy; 2018</span>
+            <span>
+                
+                由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 主题来自 <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.perfree.top/2018/06/12/2018-06-12/&title=《MyBatis Mapper代理的开发方式》 — Perfree&pic=http://www.perfree.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.perfree.top/2018/06/12/2018-06-12/&title=《MyBatis Mapper代理的开发方式》 — Perfree&source=云淡风轻" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.perfree.top/2018/06/12/2018-06-12/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MyBatis Mapper代理的开发方式》 — Perfree&url=http://www.perfree.top/2018/06/12/2018-06-12/&via=http://www.perfree.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.perfree.top/2018/06/12/2018-06-12/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKklEQVR42u3ay47CMAwFUP7/pxlptjMN1zYgNTldIVHSnC6MH3k84uv5e+V3/r3/Wbwen7gwMDBuy0iWqy693laCzPeGgYFxDmMdZNeM5NtqIM73hoGBgZFsZc2e3I+BgYExD7hX1DzsroMsBgYGRrWIfVeDLE80P1KLY2Bg3JBRffA3P39wvoGBgXETxnN89V5BrwF3+VsMDIytGUnxmSd28y2uD2282CEGBsamjEnza1JMvmto+s//BgYGxnaMfFRZDZT5SKD3N/BivoGBgbERY71oEnzXjHKW2lsHAwNja8ZkGJCH5vlIYDS8xMDAuDmj2hrLH5C8uWpL7vKJGBgYxzB6o8ckucyL2+aLw8DAOIDRSwqrpW+eLOZhtzlnwMDAuCGjunQvcczrzSSVjCaxGBgYGzEmAbdK6h0ji46FYWBgHMOojhibM4ficOLF+hgYGFszesncvD3XSw0Ld2JgYGzEyFtak3ZYPtpsNukwMDC2Zky2OB9P9lp1l68DAwPjAEay0e+MDar3YGBgnMNIysVe0Jw0+worYGBgbM0ojwxb1F5Qro48MTAw9mNMSs1eayxP/gqrYWBgbM2onl5IHtMbLSRBfzLyxMDAuDsjCbJJy6zXYuuFbwwMjDMZeUHbK0SrJWt5kICBgYFRTODyAF0tZS/3jIGBgdFKH6srv62VhoGBsSkj2WI+PKgexciHARgYGGcyJkG52sovn/4YH9HAwMC4OeMHMTn6CASAXwQAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
