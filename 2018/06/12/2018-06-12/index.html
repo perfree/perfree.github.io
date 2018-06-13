@@ -13,7 +13,6 @@
     
     
     
-    
     <title>MyBatis Mapper代理的开发方式 | Perfree | 学而时习之,不亦说乎</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
@@ -165,13 +164,12 @@
 <div class="container body-wrap">
     
     <aside class="post-widget">
-        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+        <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
             <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-开发规范"><span class="post-toc-number">1.</span> <span class="post-toc-text">1.开发规范</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-Mapper-xml映射文件"><span class="post-toc-number">2.</span> <span class="post-toc-text">2.Mapper.xml映射文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-Mapper-java接口文件"><span class="post-toc-number">3.</span> <span class="post-toc-text">3.Mapper.java接口文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-加载Mapper-xml映射文件"><span class="post-toc-number">4.</span> <span class="post-toc-text">4.加载Mapper.xml映射文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5-测试"><span class="post-toc-number">5.</span> <span class="post-toc-text">5.测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#6-总结"><span class="post-toc-number">6.</span> <span class="post-toc-text">6.总结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#7-最后扩展下-和"><span class="post-toc-number">7.</span> <span class="post-toc-text">7.最后扩展下#{}和${}</span></a></li></ol>
         </nav>
     </aside>
-
-
+    
 <article id="post-2018-06-12"
   class="post-article article-type-post fade" itemprop="blogPost">
 
@@ -215,7 +213,6 @@
         </div>
 
         <blockquote class="post-copyright">
-    
     <div class="content">
         
 <span class="post-time">
@@ -225,7 +222,6 @@
 
         
     </div>
-    
     <footer>
         <a href="http://www.perfree.top">
             <img src="/img/avatar.jpg" alt="Perfree">
@@ -328,16 +324,13 @@
 
 
 
-
-
-
 </article>
 
 <div id="reward" class="page-modal reward-lay">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <h3 class="reward-title">
         <i class="icon icon-quote-left"></i>
-        谢谢大爷~
+        感谢打赏~
         <i class="icon icon-quote-right"></i>
     </h3>
     <div class="reward-content">
@@ -387,7 +380,7 @@
         <p><span>Perfree &copy; 2018</span>
             <span>
                 
-                由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 主题来自 <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+                由 <a href="http://hexo.io/" target="_blank">Hexo</a> 强力驱动 主题引用 <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
             </span>
         </p>
     </div>
@@ -487,10 +480,10 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
     var OriginTitile = document.title, titleTime;
     document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
-            document.title = '死鬼去哪里了！';
+            document.title = '哪去了?~';
             clearTimeout(titleTime);
         } else {
-            document.title = '(つェ⊂)咦!又好了!';
+            document.title = '你回来啦~';
             titleTime = setTimeout(function() {
                 document.title = OriginTitile;
             },2000);

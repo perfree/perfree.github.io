@@ -13,7 +13,6 @@
     
     
     
-    
     <title>初次配置使用MyBatis | Perfree | 学而时习之,不亦说乎</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
@@ -167,13 +166,12 @@
 <div class="container body-wrap">
     
     <aside class="post-widget">
-        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+        <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
             <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-下载MyBatis"><span class="post-toc-number">1.</span> <span class="post-toc-text">1.下载MyBatis</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-导包"><span class="post-toc-number">2.</span> <span class="post-toc-text">2.导包</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-全局配置"><span class="post-toc-number">3.</span> <span class="post-toc-text">3.全局配置</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-1-MyBatis-事务管理类"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">3.1.MyBatis 事务管理类</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-2-MyBatis-数据源类型"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">3.2.MyBatis 数据源类型</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-log4j"><span class="post-toc-number">4.</span> <span class="post-toc-text">4.log4j</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5-核心映射文件"><span class="post-toc-number">5.</span> <span class="post-toc-text">5.核心映射文件</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5-1-SQL-映射文件结构："><span class="post-toc-number">5.1.</span> <span class="post-toc-text">5.1.SQL 映射文件结构：</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#6-Java代码"><span class="post-toc-number">6.</span> <span class="post-toc-text">6.Java代码</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#6-1-SqlSessionFactoryBuilder的生命周期："><span class="post-toc-number">6.1.</span> <span class="post-toc-text">6.1.SqlSessionFactoryBuilder的生命周期：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#6-2-SqlSessionFactory："><span class="post-toc-number">6.2.</span> <span class="post-toc-text">6.2.SqlSessionFactory：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#6-3-SqlSession："><span class="post-toc-number">6.3.</span> <span class="post-toc-text">6.3.SqlSession：</span></a></li></ol></li></ol>
         </nav>
     </aside>
-
-
+    
 <article id="post-2018-06-11"
   class="post-article article-type-post fade" itemprop="blogPost">
 
@@ -213,7 +211,6 @@
         </div>
 
         <blockquote class="post-copyright">
-    
     <div class="content">
         
 <span class="post-time">
@@ -223,7 +220,6 @@
 
         
     </div>
-    
     <footer>
         <a href="http://www.perfree.top">
             <img src="/img/avatar.jpg" alt="Perfree">
@@ -333,16 +329,13 @@
 
 
 
-
-
-
 </article>
 
 <div id="reward" class="page-modal reward-lay">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <h3 class="reward-title">
         <i class="icon icon-quote-left"></i>
-        谢谢大爷~
+        感谢打赏~
         <i class="icon icon-quote-right"></i>
     </h3>
     <div class="reward-content">
@@ -392,7 +385,7 @@
         <p><span>Perfree &copy; 2018</span>
             <span>
                 
-                由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 主题来自 <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+                由 <a href="http://hexo.io/" target="_blank">Hexo</a> 强力驱动 主题引用 <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
             </span>
         </p>
     </div>
@@ -492,10 +485,10 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
     var OriginTitile = document.title, titleTime;
     document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
-            document.title = '死鬼去哪里了！';
+            document.title = '哪去了?~';
             clearTimeout(titleTime);
         } else {
-            document.title = '(つェ⊂)咦!又好了!';
+            document.title = '你回来啦~';
             titleTime = setTimeout(function() {
                 document.title = OriginTitile;
             },2000);
