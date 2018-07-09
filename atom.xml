@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.perfree.top/"/>
-  <updated>2018-07-06T09:28:39.317Z</updated>
+  <updated>2018-07-09T07:52:12.387Z</updated>
   <id>http://www.perfree.top/</id>
   
   <author>
@@ -15,6 +15,62 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>简单项目上线流程</title>
+    <link href="http://www.perfree.top/2018/07/08/2018-07-08/"/>
+    <id>http://www.perfree.top/2018/07/08/2018-07-08/</id>
+    <published>2018-07-08T02:43:59.000Z</published>
+    <updated>2018-07-09T07:52:12.387Z</updated>
+    
+    <content type="html"><![CDATA[<p>常见的web服务器有三种:</p><p>Nginx:高性能,高并发<br>Apache:多平台,安全,流行<br>Tomcat:多用于java做jsp解析</p><h2 id="连接服务器"><a href="#连接服务器" class="headerlink" title="连接服务器"></a>连接服务器</h2><p>一般使用Git Bash来连接服务器,百度可以下载,安装过后打开输入命令进行连接<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh user@ip</span><br></pre></td></tr></table></figure></p><p>这里使用ssh命令进行连接,user为服务器主机名,ip为服务器公网ip,如:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh root@xx.xxx.xxx.xx</span><br></pre></td></tr></table></figure></p><h2 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h2><p>先查看服务器是否已经安装了Nginx:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -v</span><br></pre></td></tr></table></figure></p><p>如果出现了Nginx的版本信息则已安装,可以跳过下边两步,进行配置文件修改<br>安装命令:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install epel-release</span><br><span class="line">yum install nginx</span><br></pre></td></tr></table></figure></p><h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h2><p>查找配置文件信息:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure></p><p>打开配置文件:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure></p><p>修改user nginx:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user root</span><br></pre></td></tr></table></figure></p><p>修改http-server-location:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">root /root/www;</span><br><span class="line">index index.html index.htm;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>保存退出</p><h2 id="将网站上传至服务器"><a href="#将网站上传至服务器" class="headerlink" title="将网站上传至服务器"></a>将网站上传至服务器</h2><p>打开Git Bash输入以下命令:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r 本地文件路径 user@ip:/root/www</span><br></pre></td></tr></table></figure></p><p>示例:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r ./index.html root@xx.xxx.xxx.xx:/root/www</span><br></pre></td></tr></table></figure></p><p>这个时候就可以去服务器看以下有没有上传成功了,如果上传失败请检查服务器有没有安装scp</p><h2 id="启动服务器"><a href="#启动服务器" class="headerlink" title="启动服务器"></a>启动服务器</h2><p>先看如何检查nginx服务是否启动<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef | grep nginx</span><br></pre></td></tr></table></figure></p><p>如果运行结果为如下则没有启动:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root     10573 10503  0 09:30 pts/0    00:00:00 grep --color=auto nginx9:32</span><br></pre></td></tr></table></figure></p><p>启动命令:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx</span><br></pre></td></tr></table></figure></p><p>停止命令:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s stop</span><br></pre></td></tr></table></figure></p><p>重新加载:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure></p><p>检查配置文件状态:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure></p><p>当Nginx成功启动后,就可以通过服务器公网ip来访问网站,这个时候就可以添加域名解析了,要想成功通过域名访问网站,还需要进行备案操作</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;常见的web服务器有三种:&lt;/p&gt;
+&lt;p&gt;Nginx:高性能,高并发&lt;br&gt;Apache:多平台,安全,流行&lt;br&gt;Tomcat:多用于java做jsp解析&lt;/p&gt;
+&lt;h2 id=&quot;连接服务器&quot;&gt;&lt;a href=&quot;#连接服务器&quot; class=&quot;headerlink&quot; tit
+      
+    
+    </summary>
+    
+      <category term="web服务器" scheme="http://www.perfree.top/categories/web%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+    
+      <category term="nginx" scheme="http://www.perfree.top/tags/nginx/"/>
+    
+      <category term="上线" scheme="http://www.perfree.top/tags/%E4%B8%8A%E7%BA%BF/"/>
+    
+      <category term="web服务器" scheme="http://www.perfree.top/tags/web%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Spring-入门</title>
+    <link href="http://www.perfree.top/2018/07/07/2018-07-07/"/>
+    <id>http://www.perfree.top/2018/07/07/2018-07-07/</id>
+    <published>2018-07-07T06:21:01.000Z</published>
+    <updated>2018-07-07T06:33:10.173Z</updated>
+    
+    <content type="html"><![CDATA[<p>Spring是一个开源框架，它由Rod Johnson创建。它是为了解决企业应用开发的复杂性而创建的。它是一个容器框架，用来装javabean（java对象），中间层框架（万能胶）可以起一个连接作用，比如说把Struts和hibernate粘合在一起运用。简单来说，Spring是一个轻量级的控制反转(IoC)和面向切面(AOP)的容器框架。</p><ul><li>目的：解决企业应用开发的复杂性</li><li>功能：使用基本的JavaBean代替EJB，并提供了更多的企业应用功能</li><li>范围：任何Java应用<h2 id="控制反转-依赖注入"><a href="#控制反转-依赖注入" class="headerlink" title="控制反转(依赖注入)"></a>控制反转(依赖注入)</h2>控制反转(IoC=Inversion of Control)IoC，用白话来讲，就是由容器控制程序之间的（依赖）关系，而非传统实现中，由程序代码直接操控。这也就是所谓“控制反转”的概念所在：(依赖)控制权由应用代码中转到了外部容器，控制权的转移，是所谓反转。<br>IoC还有一个另外的名字：“依赖注入 (DI=Dependency Injection)”  ，即由容器动态的将某种依赖关系注入到组件之中 ,案例：实现Spring的IoC<br>以上摘至<a href="https://blog.csdn.net/sujin_/article/details/78700158" target="_blank" rel="noopener">sujin_的博客</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Spring是一个开源框架，它由Rod Johnson创建。它是为了解决企业应用开发的复杂性而创建的。它是一个容器框架，用来装javabean（java对象），中间层框架（万能胶）可以起一个连接作用，比如说把Struts和hibernate粘合在一起运用。简单来说，Spri
+      
+    
+    </summary>
+    
+      <category term="Spring" scheme="http://www.perfree.top/categories/Spring/"/>
+    
+    
+      <category term="Spring" scheme="http://www.perfree.top/tags/Spring/"/>
+    
+  </entry>
   
   <entry>
     <title>Hibernate-criteria查询</title>
