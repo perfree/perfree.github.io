@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Spring-AOP注解方式 | Perfree | 学而时习之,不亦说乎</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Spring,AOP,注解">
+    <meta name="description" content="AOP称为面向切面编程，在程序开发中主要用来解决一些系统层面上的问题，比如日志，事务，权限等待，Struts2的拦截器设计就是基于AOP的思想，是个比较经典的例子。 基本概念(1)Aspect(切面):通常是一个类，里面可以定义切入点和通知 (2)JointPoint(连接点):程序执行过程中明确的点，一般是方法的调用 (3)Advice(通知):AOP在特定的切入点上执行的增强处理，有befor">
+<meta name="keywords" content="Spring,AOP,注解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring-AOP注解方式">
+<meta property="og:url" content="http://www.perfree.top/2018/07/10/2018-07-10/index.html">
+<meta property="og:site_name" content="Perfree">
+<meta property="og:description" content="AOP称为面向切面编程，在程序开发中主要用来解决一些系统层面上的问题，比如日志，事务，权限等待，Struts2的拦截器设计就是基于AOP的思想，是个比较经典的例子。 基本概念(1)Aspect(切面):通常是一个类，里面可以定义切入点和通知 (2)JointPoint(连接点):程序执行过程中明确的点，一般是方法的调用 (3)Advice(通知):AOP在特定的切入点上执行的增强处理，有befor">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2018/07/10/5b44a23a189be.png">
+<meta property="og:updated_time" content="2018-07-10T12:42:59.081Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring-AOP注解方式">
+<meta name="twitter:description" content="AOP称为面向切面编程，在程序开发中主要用来解决一些系统层面上的问题，比如日志，事务，权限等待，Struts2的拦截器设计就是基于AOP的思想，是个比较经典的例子。 基本概念(1)Aspect(切面):通常是一个类，里面可以定义切入点和通知 (2)JointPoint(连接点):程序执行过程中明确的点，一般是方法的调用 (3)Advice(通知):AOP在特定的切入点上执行的增强处理，有befor">
+<meta name="twitter:image" content="https://i.loli.net/2018/07/10/5b44a23a189be.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Perfree" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<!--鼠标点击小星星-->
+<script type="text/javascript" src="/js/love.js"></script>
+<!-- {% if theme.fireworks %}
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/fireworks.js"></script>
+{% endif %} -->
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Perfree</h5>
+          <a href="mailto:741223257@qq.com" title="741223257@qq.com" class="mail">741223257@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://weibo.com/gbcxf" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                微博
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/perfree" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Spring-AOP注解方式</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Spring-AOP注解方式</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-07-10T10:55:05.000Z" itemprop="datePublished" class="page-time">
+  2018-07-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Spring/">Spring</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基本概念"><span class="post-toc-number">1.</span> <span class="post-toc-text">基本概念</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Spring-Aop"><span class="post-toc-number">2.</span> <span class="post-toc-text">Spring Aop</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试包结构"><span class="post-toc-number">3.</span> <span class="post-toc-text">测试包结构</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置文件"><span class="post-toc-number">4.</span> <span class="post-toc-text">配置文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#通知-增强-类型介绍"><span class="post-toc-number">5.</span> <span class="post-toc-text">通知(增强)类型介绍</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#UserService类"><span class="post-toc-number">6.</span> <span class="post-toc-text">UserService类</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#UserServiceImpl类"><span class="post-toc-number">7.</span> <span class="post-toc-text">UserServiceImpl类</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#UserAdvice类"><span class="post-toc-number">8.</span> <span class="post-toc-text">UserAdvice类</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置文件applicationContext-xml"><span class="post-toc-number">9.</span> <span class="post-toc-text">配置文件applicationContext.xml</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试类"><span class="post-toc-number">10.</span> <span class="post-toc-text">测试类</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#运行测试"><span class="post-toc-number">11.</span> <span class="post-toc-text">运行测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#通知执行的优先级"><span class="post-toc-number">12.</span> <span class="post-toc-text">通知执行的优先级</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#切入点的定义和表达式"><span class="post-toc-number">13.</span> <span class="post-toc-text">切入点的定义和表达式</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2018-07-10"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Spring-AOP注解方式</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-07-10 18:55:05" datetime="2018-07-10T10:55:05.000Z"  itemprop="datePublished">2018-07-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Spring/">Spring</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>AOP称为面向切面编程，在程序开发中主要用来解决一些系统层面上的问题，比如日志，事务，权限等待，Struts2的拦截器设计就是基于AOP的思想，是个比较经典的例子。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>(1)Aspect(切面):通常是一个类，里面可以定义切入点和通知</p>
+<p>(2)JointPoint(连接点):程序执行过程中明确的点，一般是方法的调用</p>
+<p>(3)Advice(通知):AOP在特定的切入点上执行的增强处理，有before,after,afterReturning,afterThrowing,around</p>
+<p>(4)Pointcut(切入点):就是带有通知的连接点，在程序中主要体现为书写切入点表达式</p>
+<p>(5)AOP代理：AOP框架创建的对象，代理就是目标对象的加强。Spring中的AOP代理可以使JDK动态代理，也可以是CGLIB代理，前者基于接口，后者基于子类<br>(6)目标对象:被代理的对象<br>(7)织入:将Advice应用到切入点得过程</p>
+<h2 id="Spring-Aop"><a href="#Spring-Aop" class="headerlink" title="Spring Aop"></a>Spring Aop</h2><p>Spring中的AOP代理还是离不开Spring的IOC容器，代理的生成，管理及其依赖关系都是由IOC容器负责，Spring默认使用JDK动态代理，在需要代理类而不是代理接口的时候，Spring会自动切换为使用CGLIB代理，不过现在的项目都是面向接口编程，所以JDK动态代理相对来说用的还是多一些。以上部分摘至<a href="https://www.cnblogs.com/liuruowang/p/5711563.html" target="_blank" rel="noopener">珍惜阳光</a></p>
+<h2 id="测试包结构"><a href="#测试包结构" class="headerlink" title="测试包结构"></a>测试包结构</h2><p>UserAdvice:通知类(增强类)<br>UserService:接口<br>UserServiceImpl:被增强类<br>SpringAopTest:测试类<br>applicationContext.xml:配置文件<br>如图:</p>
+<p><img src="https://i.loli.net/2018/07/10/5b44a23a189be.png" alt="包结构"></p>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;beans xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> </span><br><span class="line">xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span> </span><br><span class="line">xmlns:aop=<span class="string">"http://www.springframework.org/schema/aop"</span> </span><br><span class="line">xsi:schemaLocation=<span class="string">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd </span></span><br><span class="line"><span class="string">http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd "</span>&gt;</span><br><span class="line">	&lt;!-- 配置目标对象 --&gt;</span><br><span class="line">	&lt;bean name=<span class="string">"userService"</span> class=<span class="string">"com.fly.service.impl.UserServiceImpl"</span>&gt;&lt;/bean&gt;</span><br><span class="line">	&lt;!-- 配置通知 --&gt;</span><br><span class="line">	&lt;bean name=<span class="string">"userAdvice"</span> class=<span class="string">"com.fly.advice.UserAdvice"</span>&gt;&lt;/bean&gt;</span><br><span class="line">	&lt;!-- 配置使用注解 --&gt;</span><br><span class="line">	&lt;aop:aspectj-autoproxy&gt;&lt;/aop:aspectj-autoproxy&gt;</span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="通知-增强-类型介绍"><a href="#通知-增强-类型介绍" class="headerlink" title="通知(增强)类型介绍"></a>通知(增强)类型介绍</h2><ol>
+<li><p>@Aspect表示一个类为通知类</p>
+</li>
+<li><p>@Before在目标方法被调用之前做增强处理,@Before只需要指定切入点表达式即可</p>
+</li>
+<li><p>@AfterReturning:在目标方法正常完成后做增强,@AfterReturning除了指定切入点表达式后，还可以指定一个返回值形参名returning,代表目标方法的返回值</p>
+</li>
+<li><p>@AfterThrowing:主要用来处理程序中未处理的异常,@AfterThrowing除了指定切入点表达式后，还可以指定一个throwing的返回值形参名,可以通过该形参名</p>
+</li>
+<li><p>@After:在目标方法完成之后做增强，无论目标方法时候成功完成。@After可以指定一个切入点表达式</p>
+</li>
+<li><p>@Around:环绕通知,在目标方法完成前后做增强处理,环绕通知是最重要的通知类型,像事务,日志等都是环绕通知,注意编程中核心是一个ProceedingJoinPoint</p>
+</li>
+</ol>
+<h2 id="UserService类"><a href="#UserService类" class="headerlink" title="UserService类"></a>UserService类</h2><p>只是一个接口,定义了一个简单的方法<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">package com.fly.service;</span><br><span class="line"></span><br><span class="line">public interface UserService &#123;</span><br><span class="line">	public void save();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="UserServiceImpl类"><a href="#UserServiceImpl类" class="headerlink" title="UserServiceImpl类"></a>UserServiceImpl类</h2><p>实现UserService接口,也是被通知(增强)的类,为了测试,在方法体内打印一句话<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">package com.fly.service.impl;</span><br><span class="line"></span><br><span class="line">import com.fly.service.UserService;</span><br><span class="line"></span><br><span class="line">public class UserServiceImpl implements UserService&#123;</span><br><span class="line">	public void <span class="function"><span class="title">save</span></span>() &#123;</span><br><span class="line">		System.out.println(<span class="string">"========save======="</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="UserAdvice类"><a href="#UserAdvice类" class="headerlink" title="UserAdvice类"></a>UserAdvice类</h2><p>通知(增强)类也叫切面类<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">package com.fly.advice;</span><br><span class="line"></span><br><span class="line">import org.aspectj.lang.ProceedingJoinPoint;</span><br><span class="line">import org.aspectj.lang.annotation.After;</span><br><span class="line">import org.aspectj.lang.annotation.AfterReturning;</span><br><span class="line">import org.aspectj.lang.annotation.AfterThrowing;</span><br><span class="line">import org.aspectj.lang.annotation.Around;</span><br><span class="line">import org.aspectj.lang.annotation.Aspect;</span><br><span class="line">import org.aspectj.lang.annotation.Before;</span><br><span class="line">import org.aspectj.lang.annotation.Pointcut;</span><br><span class="line">@Aspect</span><br><span class="line">public class UserAdvice &#123;</span><br><span class="line">	//用来提取表达式</span><br><span class="line">	@Pointcut(<span class="string">"execution(* com.fly.service..*ServiceImpl.*(..))"</span>)</span><br><span class="line">	public void <span class="function"><span class="title">pc</span></span>() &#123;&#125;</span><br><span class="line">	</span><br><span class="line">	@Before(<span class="string">"UserAdvice.pc()"</span>)</span><br><span class="line">	public void <span class="function"><span class="title">befor</span></span>() &#123;</span><br><span class="line">		System.out.println(<span class="string">"befor advice.........."</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@After(<span class="string">"UserAdvice.pc()"</span>)</span><br><span class="line">	public void <span class="function"><span class="title">after</span></span>() &#123;</span><br><span class="line">		System.out.println(<span class="string">"after advice.........."</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@Around(<span class="string">"UserAdvice.pc()"</span>)</span><br><span class="line">	public void around(ProceedingJoinPoint pjp) throws Throwable &#123;</span><br><span class="line">		System.out.println(<span class="string">"around advice1.........."</span>);</span><br><span class="line">		pjp.proceed();</span><br><span class="line">		System.out.println(<span class="string">"around advice2.........."</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@AfterThrowing(<span class="string">"UserAdvice.pc()"</span>)</span><br><span class="line">	public void <span class="function"><span class="title">afterThrowing</span></span>() &#123;</span><br><span class="line">		System.out.println(<span class="string">"afterThrowing advice......."</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	@AfterReturning(<span class="string">"UserAdvice.pc()"</span>)</span><br><span class="line">	public void <span class="function"><span class="title">afterReturning</span></span>() &#123;</span><br><span class="line">		System.out.println(<span class="string">"afterReturning advice......."</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="配置文件applicationContext-xml"><a href="#配置文件applicationContext-xml" class="headerlink" title="配置文件applicationContext.xml"></a>配置文件applicationContext.xml</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;beans xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> </span><br><span class="line">xmlns=<span class="string">"http://www.springframework.org/schema/beans"</span> </span><br><span class="line">xmlns:aop=<span class="string">"http://www.springframework.org/schema/aop"</span> </span><br><span class="line">xsi:schemaLocation=<span class="string">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd </span></span><br><span class="line"><span class="string">http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd "</span>&gt;</span><br><span class="line">	&lt;!-- 配置目标对象 --&gt;</span><br><span class="line">	&lt;bean name=<span class="string">"userService"</span> class=<span class="string">"com.fly.service.impl.UserServiceImpl"</span>&gt;&lt;/bean&gt;</span><br><span class="line">	&lt;!-- 配置通知 --&gt;</span><br><span class="line">	&lt;bean name=<span class="string">"userAdvice"</span> class=<span class="string">"com.fly.advice.UserAdvice"</span>&gt;&lt;/bean&gt;</span><br><span class="line">	&lt;!-- 配置使用注解 --&gt;</span><br><span class="line">	&lt;aop:aspectj-autoproxy&gt;&lt;/aop:aspectj-autoproxy&gt;</span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="测试类"><a href="#测试类" class="headerlink" title="测试类"></a>测试类</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">package com.fly.test;</span><br><span class="line"></span><br><span class="line">import org.junit.Test;</span><br><span class="line">import org.junit.runner.RunWith;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.test.context.ContextConfiguration;</span><br><span class="line">import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;</span><br><span class="line"></span><br><span class="line">import com.fly.service.UserService;</span><br><span class="line"></span><br><span class="line">@RunWith(SpringJUnit4ClassRunner.class)</span><br><span class="line">@ContextConfiguration(<span class="string">"classpath:applicationContext.xml"</span>)</span><br><span class="line">public class SpringAopTest &#123;</span><br><span class="line">	@Autowired</span><br><span class="line">	private UserService us;</span><br><span class="line">	</span><br><span class="line">	@Test</span><br><span class="line">	public void <span class="function"><span class="title">fun</span></span>() &#123;</span><br><span class="line">		us.save();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="运行测试"><a href="#运行测试" class="headerlink" title="运行测试"></a>运行测试</h2><p>控制台输出结果:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">around advice1..........</span><br><span class="line">befor advice..........</span><br><span class="line">========save=======</span><br><span class="line">around advice2..........</span><br><span class="line">after advice..........</span><br><span class="line">afterReturning advice.......</span><br></pre></td></tr></table></figure></p>
+<p>一个非常简单的测试，基本涵盖了各种增强定义。注意:做环绕通知的时候，调用ProceedingJoinPoint的proceed()方法才会执行目标方法。</p>
+<h2 id="通知执行的优先级"><a href="#通知执行的优先级" class="headerlink" title="通知执行的优先级"></a>通知执行的优先级</h2><p>进入目标方法时,先织入Around,再织入Before，退出目标方法时，先织入Around,再织入After,最后才织入AfterReturning。</p>
+<p>注意:Spring AOP的环绕通知会影响到AfterThrowing通知的运行,不要同时使用!同时使用也没啥意义。</p>
+<h2 id="切入点的定义和表达式"><a href="#切入点的定义和表达式" class="headerlink" title="切入点的定义和表达式"></a>切入点的定义和表达式</h2><p>Spring AOP支持的切入点指示符：</p>
+<ol>
+<li>execution:用来匹配执行方法的连接点<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Pointcut(<span class="string">"execution(* com.fly.service..*ServiceImpl.*(..))"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>上边第一个<em>表示匹配任意的方法返回值,上面的第一个..表示service包及其子包,第二个</em>表示所有类,第三个*表示所有方法，第二个..表示方法的任意参数个数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Pointcut(<span class="string">"within(com.fly.service.*)"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>上边within限定匹配方法的连接点,上面的就是表示匹配service包下的任意连接点<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Pointcut(<span class="string">"this(com.fly.service.UserService)"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>this用来限定AOP代理必须是指定类型的实例，如上，指定了一个特定的实例，就是UserService<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D:@Pointcut(<span class="string">"bean(userService)"</span>)</span><br></pre></td></tr></table></figure></p>
+<p>bean也是非常常用的,bean可以指定IOC容器中的bean的名称</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-07-10T12:42:59.081Z" itemprop="dateUpdated">2018-07-10 20:42:59</time>
+</span><br>
+
+
+        
+    </div>
+    <footer>
+        <a href="http://www.perfree.top">
+            <img src="/img/avatar.jpg" alt="Perfree">
+            Perfree
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AOP/">AOP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/注解/">注解</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.perfree.top/2018/07/10/2018-07-10/&title=《Spring-AOP注解方式》 — Perfree&pic=http://www.perfree.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.perfree.top/2018/07/10/2018-07-10/&title=《Spring-AOP注解方式》 — Perfree&source=云淡风轻" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.perfree.top/2018/07/10/2018-07-10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Spring-AOP注解方式》 — Perfree&url=http://www.perfree.top/2018/07/10/2018-07-10/&via=http://www.perfree.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.perfree.top/2018/07/10/2018-07-10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/07/08/2018-07-08/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">简单项目上线流程</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'false' == 'true',
+            appId: "VkbspRja5wAspUWPfiI6cA2C-gzGzoHsz",
+            appKey: "goKucxMRg4MJnSS3vqfTEGyr",
+            avatar: "mm",
+            placeholder: "发表看法~",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        感谢打赏~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+       
+    </div>
+    <div class="bottom">
+        <p><span>Perfree &copy; 2018</span>
+            
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.perfree.top/2018/07/10/2018-07-10/&title=《Spring-AOP注解方式》 — Perfree&pic=http://www.perfree.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.perfree.top/2018/07/10/2018-07-10/&title=《Spring-AOP注解方式》 — Perfree&source=云淡风轻" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.perfree.top/2018/07/10/2018-07-10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Spring-AOP注解方式》 — Perfree&url=http://www.perfree.top/2018/07/10/2018-07-10/&via=http://www.perfree.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.perfree.top/2018/07/10/2018-07-10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLklEQVR42u3aQW4DIRAEQP//046UU6TY3m7YtbRQnCwnBorDaBjm8YjH83ckf33+Gf//Jx+PKwYGBsZtGcl0n7eVzPn5UD6vG1ExMDA2YCRhNNniGCk/vrffY2BgYJRBud3KzG8xMDAwWlKbLObHgYGBgZEE02LSC4p3p93FMTAwbshoF/7m5wvfNzAwMG7CeE6MPJiOXYaLnWBgYCzNSNK++cttm4Yml9uDsIuBgbEcY6wN4qxEMzmg+ugxMDAWYiRF/Pyb9iBmzvtFUoiBgbEBI/88VtZv07viEDEwMJZmtC0RSQI3M0PbqFE8FWBgYNyc0V5czw3NeUnuYG8YGBiLMq5I+2ZCcxJYMTAw9mTMp3Ftg8UM8m25DQMDY2lG8rjYpnTJN+3qB91tGBgYizLGQmfeMNFWw/LVo7wVAwNjCUYe8vKy2lmtY/nVGgMDYzdGHgqTy2pbUBtrxcDAwNiBkSyTLJmX1cYO5W3ox8DAWJrRPky2yLGwmz+IYmBg7MYYK3UVzVvlRutLMgYGxmaMJLwmCV/eZDbWNXEQcDEwMBZiJAG0LeK3F9q2yePgVxgYGAsxrrhqJuWzNqM7mA0DA2NpRhtMz2opG7s8zzx5YmBg3J0xX/pvQ3Cy9foZFQMDYwPGWDBtGykGU7rkkQADAwMjDohjmHa2F/NjYGBgnPRImcx8eSkNAwPjtoy8waJ9mGwxebkNAwNjH8ZYUK7LYXH3x1gxDgMDY1HGD4QaslBNr3U2AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '哪去了?~';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '你回来啦~';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
